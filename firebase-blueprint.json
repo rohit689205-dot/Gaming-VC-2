@@ -1,0 +1,125 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User profile details and settings",
+      "type": "object",
+      "properties": {
+        "username": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "isOnline": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["username", "displayName"]
+    },
+    "VcRoom": {
+      "title": "VC Room",
+      "description": "Voice chat room document",
+      "type": "object",
+      "properties": {
+        "roomId": { "type": "string" },
+        "roomName": { "type": "string" },
+        "hostUserId": { "type": "string" },
+        "inviteCode": { "type": "string" },
+        "privacyMode": { "type": "string", "enum": ["link", "private"] },
+        "status": { "type": "string", "enum": ["active", "ended"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "endedAt": { "type": "string", "format": "date-time" },
+        "participantCount": { "type": "integer" }
+      },
+      "required": ["roomId", "roomName", "hostUserId", "inviteCode", "privacyMode", "status"]
+    },
+    "RoomMember": {
+      "title": "Room Member",
+      "description": "Active participant in a voice room",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "isMuted": { "type": "boolean" },
+        "isSpeaking": { "type": "boolean" },
+        "joinedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "displayName"]
+    },
+    "MeetingHistoryItem": {
+      "title": "Meeting History Item",
+      "description": "Historical record of a joined voice meeting",
+      "type": "object",
+      "properties": {
+        "roomId": { "type": "string" },
+        "roomName": { "type": "string" },
+        "hostUserId": { "type": "string" },
+        "hostName": { "type": "string" },
+        "joinedAt": { "type": "string", "format": "date-time" },
+        "leftAt": { "type": "string", "format": "date-time" },
+        "durationMinutes": { "type": "integer" },
+        "status": { "type": "string" }
+      },
+      "required": ["roomId", "roomName", "hostUserId", "hostName"]
+    },
+    "FriendRequest": {
+      "title": "Friend Request",
+      "description": "Social friend request document",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderUsername": { "type": "string" },
+        "senderAvatar": { "type": "string" },
+        "recipientId": { "type": "string" },
+        "recipientName": { "type": "string" },
+        "recipientUsername": { "type": "string" },
+        "recipientAvatar": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "declined"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["senderId", "recipientId", "status"]
+    },
+    "Friendship": {
+      "title": "Friendship",
+      "description": "Mutual friendship connection",
+      "type": "object",
+      "properties": {
+        "user1Id": { "type": "string" },
+        "user2Id": { "type": "string" },
+        "friendUserId": { "type": "string" },
+        "friendDisplayName": { "type": "string" },
+        "friendUsername": { "type": "string" },
+        "friendAvatarUrl": { "type": "string" },
+        "isOnline": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["user1Id", "user2Id", "friendUserId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile collection"
+    },
+    "/rooms/{roomId}": {
+      "schema": { "$ref": "#/entities/VcRoom" },
+      "description": "Active or completed voice rooms"
+    },
+    "/rooms/{roomId}/members/{userId}": {
+      "schema": { "$ref": "#/entities/RoomMember" },
+      "description": "Members subcollection for a specific room"
+    },
+    "/users/{userId}/meetingHistory/{historyId}": {
+      "schema": { "$ref": "#/entities/MeetingHistoryItem" },
+      "description": "Per-user meeting history collection"
+    },
+    "/friendRequests/{requestId}": {
+      "schema": { "$ref": "#/entities/FriendRequest" },
+      "description": "Global friend requests collection"
+    },
+    "/friendships/{friendshipId}": {
+      "schema": { "$ref": "#/entities/Friendship" },
+      "description": "Global mutual friendships collection"
+    }
+  }
+}

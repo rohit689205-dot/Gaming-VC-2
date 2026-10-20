@@ -1,0 +1,7 @@
+{
+  "name": "VC Connect",
+  "description": "Gaming Voice Chat Application for Android",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
